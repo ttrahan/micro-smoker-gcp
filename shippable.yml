@@ -1,0 +1,21 @@
+language: node_js
+
+node_js:
+  - 0.10
+
+env:
+  global:
+    - XUNIT_FILE=./shippable/testresults/result.xml
+    - API_URL=http://demoAAPILb-1573868635.us-east-1.elb.amazonaws.com
+
+before_install:
+    - node --version
+    - mkdir -p ./shippable/testresults
+    - mkdir -p ./shippable/codecoverage
+
+script:
+    - grunt
+
+after_script:
+    - ./node_modules/.bin/istanbul report cobertura --dir  ./shippable/codecoverage/
+    - ./node_modules/.bin/istanbul cover grunt -- -u tdd
